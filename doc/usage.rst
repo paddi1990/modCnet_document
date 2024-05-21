@@ -66,7 +66,7 @@ The data processing procedure is essential for training and prediction. The raw 
 1. Guppy basecalling
 ::
 
-guppy_basecaller -i demo_data/IVT_ac4C -s demo_data/IVT_ac4C_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
+    uppy_basecaller -i demo_data/IVT_ac4C -s demo_data/IVT_ac4C_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
 
 2. Multi-fast5 to single-fast5
 ::
