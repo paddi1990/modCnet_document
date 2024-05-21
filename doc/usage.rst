@@ -63,21 +63,26 @@ Data processing
 ********************
 The data processing procedure is essential for training and prediction. The raw FAST5 files need to be converted into feature files that can be used as input for the model. The data processing scripts are located in the ``./script`` directory. The following steps are required to process the raw FAST5 files.
 
-1. Guppy basecalling::
+1. Guppy basecalling
+::
 
 guppy_basecaller -i demo_data/IVT_ac4C -s demo_data/IVT_ac4C_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
 
-2. Multi-fast5 to single-fast5::
+2. Multi-fast5 to single-fast5
+::
 multi_to_single_fast5 -i demo_data/IVT_ac4C_guppy -s demo_data/IVT_ac4C_guppy_single -t 40 --recursive
 
-3. Tombo resquiggling::
+3. Tombo resquiggling
+::
 tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_ac4C_single  demo_data/IVT_DRS_ac4C.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
 
-4. Mapping to reference::
+4. Mapping to reference
+::
 cat demo_data/IVT_ac4C_guppy/pass/*.fastq >demo_data/IVT_ac4C.fastq
 minimap2 -ax map-ont demo_data/IVT_DRS_ac4C.reference.fasta demo_data/IVT_ac4C.fastq >demo_data/IVT_ac4C.sam
 
-5. Feature extraction::
+5. Feature extraction
+::
 python script/feature_extraction.py --input demo_data/IVT_ac4C_guppy_single \
     --reference demo_data/IVT_DRS_ac4C.reference.fasta  \
     --sam demo_data/IVT_ac4C.sam \
