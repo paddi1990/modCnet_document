@@ -6,9 +6,9 @@
 Welcome to ac4Cnet's documentation!
 ==================================
 
-TandemMod is a deep learning framework for detecting RNA modifications in nanopore direct RNA sequencing (DRS) data. It offers three modes: de novo training, transfer learning, and prediction. Researchers can train from scratch, fine-tune pre-trained models, or apply existing models for predictions. TandemMod achieves high accuracy and can be used to identify multi tpyes of RNA modifications in various species and conditions. It provides a user-friendly solution for studying RNA modifications.
+ac4Cnet is a deep learning framework designed to harness the power of Oxford Nanopore direct RNA sequencing for precise identification of N4-acetylcytidine (ac4C) sites, a crucial aspect in RNA modification studies. By effectively distinguishing ac4C from unmodified cytidine and 5-methylcytosine (m5C), ac4Cnet enables accurate estimation of modification rates at each ac4C site. Through rigorous validation on independent in vitro datasets and a human cell line, ac4Cnet showcases its robustness, versatility, and immense potential in advancing the understanding and exploration of ac4C modifications in mRNA.
 
-To use TandemMod, you can follow the instructions below:
+To use ac4Cnet, you can follow the instructions below:
 
 Contents
 ==========
@@ -28,12 +28,12 @@ Contents
 
 
 
-Citing TandemMod
+Citing ac4Cnet
 --------------------------
-If you use TandemMod in your research, please cite **************************************
+If you use ac4Cnet in your research, please cite **************************************
 
 Contacts
 --------------------------
-TandemMod is developed and maintained by `You Wu <https://github.com/paddi1990>`_ and `Xiang Yu <https://github.com/yulab2021>`_ from Shanghai Jiao Tong University. If you want to contribute or have any questions, please leave an issue in `our repository <https://github.com/yulab2021/TandemMod/issues>`_.
+ac4Cnet is developed and maintained by `You Wu <https://github.com/paddi1990>`_ and `Xiang Yu <https://github.com/yulab2021>`_ from Shanghai Jiao Tong University. If you want to contribute or have any questions, please leave an issue in `our repository <https://github.com/yulab2021/ac4Cnet/issues>`_.
 
 Thank you!

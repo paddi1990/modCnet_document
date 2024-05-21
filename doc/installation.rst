@@ -2,7 +2,7 @@
 
 Installation
 ==================================
-The following modules are needed to run TandemMod.
+The following modules are needed to run ac4Cnet.
 
 
 .. list-table:: Required modules
@@ -82,20 +82,19 @@ Guppy can be obtained from `Oxford Nanopore Technologies <https://nanoporetech.c
 The entire installation will take about 10 minutes. After installing all the essential packages,  reset the environment's state by deactivating and reactivating the environment:
 ::
     conda deactivate
-    conda activate TandemMod
+    conda activate ac4Cnet
 
 We have also provided a yaml file in the repository so you can install the dependencies through the configuration file::
 
-    conda env create -f TandemMod.yaml
+    conda env create -f ac4Cnet.yaml
 
 
-The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/TandemMod>`_. You can download them by using the git clone command::
+The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/ac4Cnet>`_. You can download them by using the git clone command::
 
-    git clone https://github.com/yulab2021/TandemMod.git
+    git clone https://github.com/yulab2021/ac4Cnet.git
 
-TandemMod offers three modes: de novo training, transfer learning, and prediction. Researchers can train from scratch, fine-tune pre-trained models, or apply existing models for predictions. It provides a user-friendly solution for studying RNA modifications.
 
-In the provided repository, the pretrained models are located under the ``./models`` directory, and the data processing scripts and the main script are located under the ``./scripts`` directory:: 
+In the provided repository, the pretrained models are located under the ``./model`` directory, and the data processing scripts and the main script are located under the ``./script`` directory:: 
 
     .
     ├── data

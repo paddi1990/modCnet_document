@@ -46,8 +46,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'TandemMod'
-copyright = '2023, Yulab'
+project = 'ac4Cnet'
+copyright = '2024, Yulab'
 author = 'Yulab'
 
 # The version info for the project you're documenting, acts as replacement for

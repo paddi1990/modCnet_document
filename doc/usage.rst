@@ -6,13 +6,13 @@ Usage
 Source code
 ********************
 
-The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/TandemMod>`_. You can download them by using the git clone command::
+The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/ac4Cnet>`_. You can download them by using the git clone command::
 
-    git clone https://github.com/yulab2021/TandemMod.git
+    git clone https://github.com/yulab2021/ac4Cnet.git
 
 TandemMod offers three modes: de novo training, transfer learning, and prediction. Researchers can train from scratch, fine-tune pre-trained models, or apply existing models for predictions. It provides a user-friendly solution for studying RNA modifications.
 
-In the provided repository, the pretrained models are located under the ``./models`` directory, and the data processing scripts and the main script are located under the ``./scripts`` directory:: 
+In the provided repository, the pretrained models are located under the ``./model`` directory, and the data processing scripts and the main script are located under the ``./script`` directory:: 
 
     .
     ├── data
@@ -94,23 +94,12 @@ The training process can be stopped manually based on the performance on the tes
     Epoch 2-6 Train acc: 0.865912, Test Acc: 0.814036, time: 0.701268
 
 
-Transfer learning
-********************
-In transfer learning mode, you can used a pretrained model to retrain the bottom layers to identify new modification. This mode leverages the knowledge acquired by the pretrained model on a large dataset and applies it to a specific target task with potentially limited data. To fine-tune the TandemMod model using other dataset, you can utilize the transfer run mode by setting the ``--run_mode`` argument to "transfer":
-::
-    python scripts/TandemMod.py --run_mode transfer \
-          --pretrained_model model/m6A.pkl \
-          --new_model model/m6Am.pkl
-          --train_data_mod data/m6Am_train.tsv \
-          --train_data_unmod data/A_train.tsv \
-          --test_data_mod data/m6Am_test.tsv \
-          --test_data_unmod data/A_test.tsv  \
-          --epoch 100
+
 
 
 Prediction
 ********************
-Pretained models were saved in directory ``./models``. You can load pretrained models to predict modification for new data by setting the ``--run_mode`` argument to "predict". Before prediction, the raw FAST5 files need to undergo the `data processing procedure <data_preprocessing>`_ ::
+Pretained models were saved in directory ``./model``. You can load pretrained models to predict modification for new data by setting the ``--run_mode`` argument to "predict". Before prediction, the raw FAST5 files need to undergo the `data processing procedure <data_preprocessing>`_ ::
 
     python scripts/TandemMod.py --run_mode predict \
           --pretrained_model model/m6A.pkl \

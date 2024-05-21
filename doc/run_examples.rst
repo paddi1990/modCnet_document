@@ -2,11 +2,11 @@
 
 Run examples
 ==================================
-This sections gives examples on how to use the three modes of TandemMod.
+This sections gives examples on how to use ac4Cnet.
 
 Train m6A model using IVET m6A dataset
 ********************
-IVET datasets have been uploaded to GEO database under the accession number `GSE227087 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227087>`_. To train a m6A detection model, the followinng two fast5 files (m6A-modified and unmodified) are required.
+IVET datasets have been uploaded to GEO database under the accession numbers of `GSE227087 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227087>`_ and . To train a m6A detection model, the followinng two fast5 files (m6A-modified and unmodified) are required.
 ::
     IVET_DRS_m6A.tar.gz 
     IVET_DRS_unmodified.tar.gz 
