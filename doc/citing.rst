@@ -1,6 +1,6 @@
 .. _citing:
 
 
-Citing TandemMod
+Citing ac4Cnet
 --------------------------
-If you use TandemMod in your research, please cite ******************************.
+If you use ac4Cnet in your research, please cite ******************************.
