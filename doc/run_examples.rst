@@ -6,7 +6,7 @@ This sections gives examples on how to use ac4Cnet.
 
 Train ac4C model using IVT datasets
 ********************
-To train a ac4C detection model, m6A-modified and unmodified samples are required. ac4C-modified and unmodified IVT datasets generated in this study have been uploaded to GEO database under the accession numbers of `GSE227087 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227087>`_ and `GSE267558 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE267558>`_. This demo demostrated how to train a ac4C detection model from scratch using the IVT datasets. 
+To train a ac4C detection model, ac4C-modified and unmodified samples are required. ac4C-modified and unmodified IVT datasets generated in this study have been uploaded to GEO database under the accession numbers of `GSE227087 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227087>`_ and `GSE267558 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE267558>`_. This demo demostrated how to train a ac4C detection model from scratch using the IVT datasets. 
 
 
 **1. Guppy basecalling**
@@ -34,10 +34,10 @@ Convert multi-reads FAST5 files to single-read FAST5 files. If the data generate
 In this step, the sequence obtained by basecalling is aligned or mapped to a reference genome or a known sequence. Then the corrected sequence is then associated with the corresponding current signals. The resquiggling process is typically performed in-place. No separate files are generated in this step.
 ::
     #ac4C-modified
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_ac4C_guppy_single  demo_data/IVT_DRS_ac4C.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
+    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_ac4C_guppy_single  demo_data/IVT_DRS.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
     
     #unmodified
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_unmod_guppy_single  demo_data/IVT_DRS_ac4C.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
+    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_unmod_guppy_single  demo_data/IVT_DRS.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
 
 **4. Map reads to reference**
 
@@ -45,11 +45,11 @@ minimap2 is used to map basecalled sequences to reference transcripts. The outpu
 ::
     #ac4C-modified
     cat demo_data/IVT_ac4C_guppy/pass/*.fastq >demo_data/IVT_ac4C.fastq
-    minimap2 -ax map-ont demo_data/IVT_DRS_ac4C.reference.fasta demo_data/IVT_ac4C.fastq >demo_data/IVT_ac4C.sam
+    minimap2 -ax map-ont demo_data/IVT_DRS.reference.fasta demo_data/IVT_ac4C.fastq >demo_data/IVT_ac4C.sam
 
     #unmodified
     cat demo_data/IVT_unmod_guppy/pass/*.fastq >demo_data/IVT_unmod.fastq
-    minimap2 -ax map-ont demo_data/IVT_DRS_ac4C.reference.fasta demo/IVT_unmod.fastq >demo_data/IVT_unmod.sam
+    minimap2 -ax map-ont demo_data/IVT_DRS.reference.fasta demo/IVT_unmod.fastq >demo_data/IVT_unmod.sam
 
 **5. Feature extraction**
 
@@ -57,7 +57,7 @@ Extract features from resquiggled fast5 files using the ``feature_extraction.py`
 ::
     #ac4C-modified
     python script/feature_extraction.py --input demo_data/IVT_ac4C_guppy_single \
-        --reference demo_data/IVT_DRS_ac4C.reference.fasta  \
+        --reference demo_data/IVT_DRS.reference.fasta  \
         --sam demo_data/IVT_ac4C.sam \
         --output demo_data/IVT_ac4C.feature.tsv \
         --clip 10 \
@@ -65,7 +65,7 @@ Extract features from resquiggled fast5 files using the ``feature_extraction.py`
     
     #unmodified
     python script/feature_extraction.py --input demo_data/IVT_unmod_guppy_single \
-        --reference demo_data/IVT_DRS_ac4C.reference.fasta  \
+        --reference demo_data/IVT_DRS.reference.fasta  \
         --sam demo_data/IVT_unmod.sam \
         --output demo_data/IVT_unmod.feature.tsv \
         --clip 10 \
@@ -137,9 +137,9 @@ The training set is used to train the model, allowing it to learn patterns and r
 
 **7. Train ac4C model**
 
-To train the TandemMod model using your own dataset from scratch, set the ``--run_mode`` argument to "train" and the ``--model_type`` argument to "C/ac4C". TandemMod accepts both modified and unmodified feature files as input. Additionally, test feature files are necessary to evaluate the model's performance. You can specify the model save path by using the argument ``--new_model``. The model's training epochs can be defined using the argument ``--epochs``, and the model states will be saved at the end of each epoch. TandemMod will preferentially use the ``GPU`` for training if CUDA is available on your device; otherwise, it will utilize the ``CPU`` mode. The training process duration can vary, depending on the size of your dataset and the computational capacity, and may last for several hours. 
+To train the ac4Cnet model using your own dataset from scratch, set the ``--run_mode`` argument to "train" and the ``--model_type`` argument to "C/ac4C". ac4Cnet accepts both modified and unmodified feature files as input. Additionally, test feature files are necessary to evaluate the model's performance. You can specify the model save path by using the argument ``--new_model``. The model's training epochs can be defined using the argument ``--epochs``, and the model states will be saved at the end of each epoch. ac4Cnet will preferentially use the ``GPU`` for training if CUDA is available on your device; otherwise, it will utilize the ``CPU`` mode. The training process duration can vary, depending on the size of your dataset and the computational capacity, and may last for several hours. 
 ::
-    python scripts/TandemMod.py --run_mode train \
+    python script/ac4Cnet.py --run_mode train \
       --model_type C/ac4C \
       --new_model demo_data/model/C_ac4C.IVT.demo.pkl \
       --train_data_C demo_data/IVT_unmod.feature.train.tsv \
@@ -168,14 +168,14 @@ During training process, the following information can be used to monitor and ev
     Epoch 11-0 Train acc: 0.858000,Test Acc: 0.857500,time0:00:18.485811
 
 
-After the data processing and model training, the following files should be generated by TandemMod. The trained model ``C_ac4C.IVT.demo.pkl`` will be saved in the ``./demo_data/model/`` folder. You can utilize this model for making predictions in the future.
+After the data processing and model training, the following files should be generated by ac4Cnet. The trained model ``C_ac4C.IVT.demo.pkl`` will be saved in the ``./demo_data/model/`` folder. You can utilize this model for making predictions in the future.
 ::
     .
     ├── ac4C.feature.test.tsv
     ├── ac4C.feature.train.tsv
     ├── C.feature.test.tsv
     ├── C.feature.train.tsv
-    ├── IVT_DRS_ac4C.reference.fasta
+    ├── IVT_DRS.reference.fasta
     ├── IVT_fast5
     │   └── batch_0.fast5
     ├── IVT_fast5_guppy
@@ -214,68 +214,69 @@ After the data processing and model training, the following files should be gene
 
 Train m5C model using IVT datasets
 ********************
-Curlcake datasets are publicly available at the GEO database under the accession code `GSE124309 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE124309>`_. In this demo, subsets of the curcake datasets (m6A-modified and unmodified) were taken for demonstration purposes due to the large size of the original datasets. The demo datasets were located under ``./demo/curlcake/`` directory.
-::
-    demo
-    └── curlcake
-        ├── curlcake_m6A
-        │   └── curlcake_m6A.fast5
-        └── curlcake_unmod
-            └── curlcake_unmod.fast5
+m5C-modified and unmodified IVT datasets are publicly available at the GEO database under the accession code `GSE227087 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE227087>`_. 
 
 **1. Guppy basecalling**
 
 Basecalling converts the raw signal generated by Oxform Nanopore sequencing to DNA/RNA sequence. Guppy is used for basecalling in this step. In some nanopore datasets, the sequence information is already contained within the FAST5 files. In such cases, the basecalling step can be skipped as the sequence data is readily available.
 ::
-    #m6A 
-    guppy_basecaller -i demo/curlcake/curlcake_m6A -s demo/curlcake/curlcake_m6A_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
+    #m5C-modified
+    guppy_basecaller -i demo_data/IVT_m5C -s demo_data/IVT_m5C_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
     
     #unmodified
-    guppy_basecaller -i demo/curlcake/curlcake_unmod -s demo/curlcake/curlcake_unmod_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
+    guppy_basecaller -i demo_data/IVT_unmod -s demo_data/IVT_unmod_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
 
 **2. Multi-reads FAST5 files to single-read FAST5 files**
 
 Convert multi-reads FAST5 files to single-read FAST5 files. If the data generated by the sequencing device is already in the single-read format, this step can be skipped.
 ::
-    #m6A 
-    multi_to_single_fast5 -i demo/curlcake/curlcake_m6A_guppy -s demo/curlcake/curlcake_m6A_guppy_single --recursive
+    #m5C-modified
+    multi_to_single_fast5 -i demo_data/IVT_m5C_guppy -s demo_data/IVT_m5C_guppy_single --recursive
     
     #unmodified
-    multi_to_single_fast5 -i demo/curlcake/curlcake_unmod_guppy -s demo/curlcake/curlcake_unmod_guppy_single --recursive
+    multi_to_single_fast5 -i demo_data/IVT_unmod_guppy -s demo_data/IVT_unmod_guppy_single --recursive
 
 **3. Tombo resquiggling**
 
-In this step, the sequence obtained by basecalling is aligned or mapped to a reference genome or a known sequence. Then the corrected sequence is then associated with the corresponding current signals. The resquiggling process is typically performed in-place. No separate files are generated in this step. Curlcake reference file can be download `here <https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE124309&format=file&file=GSE124309%5FFASTA%5Fsequences%5Fof%5FCurlcakes%2Etxt%2Egz>`_. 
+In this step, the sequence obtained by basecalling is aligned or mapped to a reference genome or a known sequence. Then the corrected sequence is then associated with the corresponding current signals. The resquiggling process is typically performed in-place. No separate files are generated in this step. 
 ::
-    #m6A
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_001 demo/curlcake/curlcake_m6A_guppy_single  demo/curlcake_reference.fa --processes 40 --fit-global-scale --include-event-stdev
+    #m5C-modified
+    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_m5C_guppy_single  demo_data/IVT_DRS.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
     
     #unmodified
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_001 demo/curlcake/curlcake_unmod_guppy_single  demo/curlcake_reference.fa --processes 40 --fit-global-scale --include-event-stdev
+    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/IVT_unmod_guppy_single  demo_Data/IVT_DRS.reference.fasta --processes 40 --fit-global-scale --include-event-stdev
 
 **4. Map reads to reference**
 
 minimap2 is used to map basecalled sequences to reference transcripts. The output sam file serves as the input for the subsequent feature extraction step. 
 ::
-    #m6A
-    cat demo/curlcake/curlcake_m6A_guppy/pass/*.fastq >demo/curlcake/curlcake_m6A.fastq
-    minimap2 -ax map-ont demo/curlcake_reference.fa demo/curlcake/curlcake_m6A.fastq >demo/curlcake/curlcake_m6A.sam
+    #m5C-modified
+    cat demo_data/IVT_m5C_guppy/pass/*.fastq >demo_data/IVT_m5C.fastq
+    minimap2 -ax map-ont demo_data/IVT_DRS.reference.fasta  demo_data/IVT_m5C.fastq >demo_data/IVT_m5C.sam
 
     #unmodified
-    cat demo/curlcake/curlcake_unmod_guppy/pass/*.fastq >demo/curlcake/curlcake_unmod.fastq
-    minimap2 -ax map-ont demo/curlcake_reference.fa demo/curlcake/curlcake_unmod.fastq >demo/curlcake/curlcake_unmod.sam
+    cat demo_data/IVT_unmod_guppy/pass/*.fastq >demo_data/IVT_unmod.fastq
+    minimap2 -ax map-ont demo_data/IVT_DRS.reference.fasta demo_data/IVT_unmod.fastq >demo_data/IVT_unmod.sam
 
 **5. Feature extraction**
 
-Extract signals and features from resquiggled fast5 files using the following python scripts.
+Extract signals and features from resquiggled fast5 files using the following python script.
 ::
-    #m6A
-    python scripts/extract_signal_from_fast5.py -p 40 --fast5 demo/curlcake/curlcake_m6A_guppy_single --reference demo/curlcake_reference.fa --sam demo/curlcake/curlcake_m6A.sam --output demo/curlcake/m6A.signal.tsv --clip=10
-    python scripts/extract_feature_from_signal.py  --signal_file demo/curlcake/m6A.signal.tsv --clip 10 --output demo/curlcake/m6A.feature.tsv --motif DRACH
+    #m5C-modified
+    python script/feature_extraction.py --input demo_data/IVT_m5C_guppy_single \
+        --reference demo_data/IVT_DRS.reference.fasta  \
+        --sam demo_data/IVT_m5C.sam \
+        --output demo_data/IVT_m5C.feature.tsv \
+        --clip 10 \
+        --motif NNCNN
     
     #unmodified
-    python scripts/extract_signal_from_fast5.py -p 40 --fast5 demo/curlcake/curlcake_unmod_guppy_single --reference demo/curlcake_reference.fa --sam demo/curlcake/curlcake_unmod.sam --output demo/curlcake/unmod.signal.tsv --clip=10
-    python scripts/extract_feature_from_signal.py  --signal_file demo/curlcake/unmod.signal.tsv --clip 10 --output demo/curlcake/unmod.feature.tsv --motif DRACH
+    python script/feature_extraction.py --input demo_data/IVT_unmod_guppy_single \
+        --reference demo_data/IVT_DRS.reference.fasta  \
+        --sam demo_data/IVT_unmod.sam \
+        --output demo_data/IVT_unmod.feature.tsv \
+        --clip 10 \
+        --motif NNCNN
 
 In the feature extraction step, the motif pattern should be provided using the argument ``--motif``. The base symbols of the motif follow the IUB code standard. 
 
@@ -299,345 +300,158 @@ The training set is used to train the model, allowing it to learn patterns and r
       --test_file TEST_FILE       Path to the test feature file
       --train_ratio TRAIN_RATIO   Ratio of instances to use for training (default: 0.8)
 
-    #m6A
-    python scripts/train_test_split.py --input_file demo/curlcake/m6A.feature.tsv --train_file demo/curlcake/m6A.train.feature.tsv --test_file demo/curlcake/m6A.test.feature.tsv --train_ratio 0.8
+    #m5C-modified
+    python script/train_test_split.py --input_file demo_data/IVT_m5C.feature.tsv --train_file demo_data/IVT_m5C.feature.train.tsv --test_file demo_data/IVT_m5C.feature.test.tsv --train_ratio 0.8
     
     #unmodified
-    python scripts/train_test_split.py --input_file demo/curlcake/unmod.feature.tsv --train_file demo/curlcake/unmod.train.feature.tsv --test_file demo/curlcake/unmod.test.feature.tsv --train_ratio 0.8
+    python script/train_test_split.py --input_file demo_data/IVT_unmod.feature.tsv --train_file demo_data/IVT_unmod.feature.train.tsv --test_file demo_data/IVT_unmod.feature.test.tsv --train_ratio 0.8
 
 
-**7. Train m6A model**
+**7. Train m5C model**
 
-To train the TandemMod model using your own dataset from scratch, you can set the ``--run_mode`` argument to "train". TandemMod accepts both modified and unmodified feature files as input. Additionally, test feature files are necessary to evaluate the model's performance. You can specify the model save path by using the argument ``--new_model``. The model's training epochs can be defined using the argument ``--epochs``, and the model states will be saved at the end of each epoch. TandemMod will preferentially use the ``GPU`` for training if CUDA is available on your device; otherwise, it will utilize the ``CPU`` mode. The training process duration can vary, depending on the size of your dataset and the computational capacity, and may last for several hours. 
+To train the ac4Cnet model using your own dataset from scratch, you can set the ``--run_mode`` argument to "train". ac4Cnet accepts both modified and unmodified feature files as input. Additionally, test feature files are necessary to evaluate the model's performance. You can specify the model save path by using the argument ``--new_model``. The model's training epochs can be defined using the argument ``--epochs``, and the model states will be saved at the end of each epoch. ac4Cnet will preferentially use the ``GPU`` for training if CUDA is available on your device; otherwise, it will utilize the ``CPU`` mode. The training process duration can vary, depending on the size of your dataset and the computational capacity, and may last for several hours. 
 ::
-    python scripts/TandemMod.py --run_mode train \
-      --new_model demo/model/m6A.demo.curlcake.pkl \
-      --train_data_mod demo/curlcake/m6A.train.feature.tsv \
-      --train_data_unmod demo/curlcake/unmod.train.feature.tsv \
-      --test_data_mod demo/curlcake/m6A.test.feature.tsv \
-      --test_data_unmod demo/curlcake/unmod.test.feature.tsv \
+    python script/ac4Cnet.py --run_mode train \
+      --model_type C/m5C
+      --new_model demo_data/model/C_m5C.IVT.demo.pkl \
+      --train_data_C demo_data/IVT_unmod.feature.train.tsv \
+      --train_data_m5C demo_data/IVT_m5C.feature.train.tsv \
+      --test_data_C demo_data/IVT_unmod.feature.train.tsv \
+      --test_data_m5C demo_data/IVT_m5C.feature.test.tsv \
       --epoch 100
 
 During training process, the following information can be used to monitor and evaluate the performance of the model:
 ::
+    
     device= cpu
     train process.
     data loaded.
     start training...
-    Epoch 0-0 Train acc: 0.482000,Test Acc: 0.788462,time0:00:07.666192
-    Epoch 1-0 Train acc: 0.514000,Test Acc: 0.211538,time0:00:04.977504
-    Epoch 2-0 Train acc: 0.496000,Test Acc: 0.211538,time0:00:05.498799
-    Epoch 3-0 Train acc: 0.694000,Test Acc: 0.432692,time0:00:05.893204
-    Epoch 4-0 Train acc: 0.814000,Test Acc: 0.639423,time0:00:06.149194
-    Epoch 5-0 Train acc: 0.806000,Test Acc: 0.711538,time0:00:05.443221
-    Epoch 6-0 Train acc: 0.828000,Test Acc: 0.831731,time0:00:05.706294
-    Epoch 7-0 Train acc: 0.808000,Test Acc: 0.846154,time0:00:05.674450
-    Epoch 8-0 Train acc: 0.804000,Test Acc: 0.822115,time0:00:05.956936
+    Epoch 0-0 Train acc: 0.512000,Test Acc: 0.500000,time0:08:16.780508
+    Epoch 1-0 Train acc: 0.754000,Test Acc: 0.738250,time0:04:33.946534
+    Epoch 2-0 Train acc: 0.786000,Test Acc: 0.775250,time0:04:57.815192
+    Epoch 3-0 Train acc: 0.756000,Test Acc: 0.804750,time0:04:31.987233
+    Epoch 4-0 Train acc: 0.818000,Test Acc: 0.813000,time0:04:55.408595
+    Epoch 5-0 Train acc: 0.814000,Test Acc: 0.820000,time0:04:31.761226
+    Epoch 6-0 Train acc: 0.854000,Test Acc: 0.833250,time0:04:15.148943
+    Epoch 7-0 Train acc: 0.834000,Test Acc: 0.833250,time0:04:42.237964
+    Epoch 8-0 Train acc: 0.836000,Test Acc: 0.825000,time0:04:35.039245
+    Epoch 9-0 Train acc: 0.814000,Test Acc: 0.804250,time0:04:52.260900
+    Epoch 10-0 Train acc: 0.862000,Test Acc: 0.842750,time0:04:57.368643
+    Epoch 11-0 Train acc: 0.846000,Test Acc: 0.847750,time0:05:24.563390
+    Epoch 12-0 Train acc: 0.872000,Test Acc: 0.850250,time0:04:59.518973
+    Epoch 13-0 Train acc: 0.840000,Test Acc: 0.867000,time0:01:40.365091
 
 
-After the data processing and model training, the following files should be generated by TandemMod. The trained model ``m6A.demo.curlcake.pkl`` will be saved in the ``./demo/model/`` folder. You can utilize this model for making predictions in the future.
-::
-    demo
-    ├── curlcake
-    │   ├── curlcake_m6A
-    │   ├── curlcake_m6A.fastq
-    │   ├── curlcake_m6A_guppy
-    │   ├── curlcake_m6A_guppy_single
-    │   ├── curlcake_m6A.sam
-    │   ├── curlcake_unmod
-    │   ├── curlcake_unmod.fastq
-    │   ├── curlcake_unmod_guppy
-    │   ├── curlcake_unmod_guppy_single
-    │   ├── curlcake_unmod.sam
-    │   ├── m6A.feature.tsv
-    │   ├── m6A.signal.tsv
-    │   ├── m6A.test.feature.tsv
-    │   ├── m6A.train.feature.tsv
-    │   ├── unmod.feature.tsv
-    │   ├── unmod.signal.tsv
-    │   ├── unmod.test.feature.tsv
-    │   └── unmod.train.feature.tsv
-    ├── curlcake_reference.fa
-    └── model
-           └── m6A.demo.curlcake.pkl
+
+After the data processing and model training, the following files should be generated by ac4Cnet. The trained model ``C_m5C.IVT.demo.pkl`` will be saved in the ``./demo_data/model/`` folder. You can utilize this model for making predictions in the future.
 
 
-Transfer m6A model to m7G using ELIGOS dataset
+Predict ac4C sites in human cell line
 ********************
 
-To transfer the pretrained m6A model to an m7G prediction model using the ELIGOS dataset, you can follow these steps:
-
-* Obtain the ELIGOS dataset: Download or access the ELIGOS m7G dataset, which consists of the necessary data (m7G-modified and unmodified) for training and testing.
-
-* Prepare the data: Preprocess the ELIGOS dataset to extact features for transfer learning.
-
-* Load the pretrained m6A model: Load the pretrained m6A model that you want to transfer to predict m7G modifications. This model should have been previously trained on a relevant m6A dataset.
-
-* Train the modified model: Use the ELIGOS m7G dataset to fine-tune the model's parameters using transfer learning techniques.
-
-* Evaluate the performance: Assess the performance of the transferred m7G model on the m7G testing set from the ELIGOS dataset.
-
-By following these steps, you can transfer the knowledge gained from the pretrained m6A model to predict m7G modifications using the ELIGOS dataset.
-
-ELIGOS datasets are publicly available at the SRA database under the accession code `SRP166020 <https://www.ncbi.nlm.nih.gov/sra/?term=SRP166020>`_. In this demo, subsets of the ELIGOS datasets (m7G-modified and unmodified) were taken for demonstration purposes due to the large size of the original datasets. The demo datasets were located under ``./demo/ELIGOS/`` directory.
+HeLa nanopore data is publicly available and can be downloaded from the `GSE211759 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE211759>`_. In this demo, subset of the HeLa nanopore data was taken for demonstration purposes due to the large size of the original datasets. The demo datasets were located under ``./demo_data/HeLa_fast5/`` directory.
 ::
     demo
-    └── ELIGOS
-        ├── ELIGOS_m7G
-        │   └── ELIGOS_m7G.fast5
-        └── ELIGOS_unmod
-            └── ELIGOS_unmod.fast5
+    └── HeLa
+        └── HeLa_fast5
+            └── batch0.fast5
 
 **1. Guppy basecalling**
 
 Basecalling converts the raw signal generated by Oxform Nanopore sequencing to DNA/RNA sequence. Guppy is used for basecalling in this step. In some nanopore datasets, the sequence information is already contained within the FAST5 files. In such cases, the basecalling step can be skipped as the sequence data is readily available.
 ::
-    #m7G 
-    guppy_basecaller -i demo/ELIGOS/ELIGOS_m7G -s demo/ELIGOS/ELIGOS_m7G_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
-    
-    #unmodified
-    guppy_basecaller -i demo/ELIGOS/ELIGOS_unmod -s demo/ELIGOS/ELIGOS_unmod_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
-
-**2. Multi-reads FAST5 files to single-read FAST5 files**
-
-Convert multi-reads FAST5 files to single-read FAST5 files. If the data generated by the sequencing device is already in the single-read format, this step can be skipped.
-::
-    #m7G 
-    multi_to_single_fast5 -i demo/ELIGOS/ELIGOS_m7G_guppy -s demo/ELIGOS/ELIGOS_m7G_guppy_single --recursive
-    
-    #unmodified
-    multi_to_single_fast5 -i demo/ELIGOS/ELIGOS_unmod_guppy -s demo/ELIGOS/ELIGOS_unmod_guppy_single --recursive
-
-**3. Tombo resquiggling**
-
-In this step, the sequence obtained by basecalling is aligned or mapped to a reference genome or a known sequence. Then the corrected sequence is then associated with the corresponding current signals. The resquiggling process is typically performed in-place. No separate files are generated in this step. ELIGOS reference file can be download `here <https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/nar/49/2/10.1093_nar_gkaa620/1/gkaa620_supplemental_files.zip?Expires=1690555116&Signature=Mv7ppemTnplIZAvv6G3W-lob1eQwK5IvNeIIF-1GM8Jy93AdT6ALUynRjW3HQAyCMgkMW-0WnXktuVJfKDCUXiiwvjZ9z5iO5LksCl1e6yEA5dgRlr-FVUrDbj81NIfUJNhKReo5gxRYc~f7wbFZRcy9CcSB-D1DloUmv-4qdcydr35sM-YDKgfyNfaE-ZKnCZZ1KydDNtx7oRfYHCof-a3oHSNgxn5DFM9bGCq147cw6i9B1bCURAPLltdPzR4i7cBXmIRoNZuVkjLe8EktJPg47v9ElqlPUlZfAqoaESbmPtEs8NLoX~~82o~eMrjwomK4W5CzgwAZhJJIeelr7A__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA>`_. 
-::
-    #m7G
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_001 demo/ELIGOS/ELIGOS_m7G_guppy_single  demo/ELIGOS_reference.fa --processes 40 --fit-global-scale --include-event-stdev
-    
-    #unmodified
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_001 demo/ELIGOS/ELIGOS_unmod_guppy_single  demo/ELIGOS_reference.fa --processes 40 --fit-global-scale --include-event-stdev
-
-**4. Map reads to reference**
-
-minimap2 is used to map basecalled sequences to reference transcripts. The output sam file serves as the input for the subsequent feature extraction step. 
-::
-    #m7G
-    cat demo/ELIGOS/ELIGOS_m7G_guppy/pass/*.fastq >demo/ELIGOS/ELIGOS_m7G.fastq
-    minimap2 -ax map-ont demo/ELIGOS_reference.fa demo/ELIGOS/ELIGOS_m7G.fastq >demo/ELIGOS/ELIGOS_m7G.sam
-
-    #unmodified
-    cat demo/ELIGOS/ELIGOS_unmod_guppy/pass/*.fastq >demo/ELIGOS/ELIGOS_unmod.fastq
-    minimap2 -ax map-ont demo/ELIGOS_reference.fa demo/ELIGOS/ELIGOS_unmod.fastq >demo/ELIGOS/ELIGOS_unmod.sam
-
-**5. Feature extraction**
-
-Extract signals and features from resquiggled fast5 files using the following python scripts.
-::
-    #m7G
-    python scripts/extract_signal_from_fast5.py -p 40 --fast5 demo/ELIGOS/ELIGOS_m7G_guppy_single --reference demo/ELIGOS_reference.fa --sam demo/ELIGOS/ELIGOS_m7G.sam --output demo/ELIGOS/m7G.signal.tsv --clip=10
-    python scripts/extract_feature_from_signal.py  --signal_file demo/ELIGOS/m7G.signal.tsv --clip 10 --output demo/ELIGOS/m7G.feature.tsv --motif NNGNN
-    
-    #unmodified
-    python scripts/extract_signal_from_fast5.py -p 40 --fast5 demo/ELIGOS/ELIGOS_unmod_guppy_single --reference demo/ELIGOS_reference.fa --sam demo/ELIGOS/ELIGOS_unmod.sam --output demo/ELIGOS/unmod.signal.tsv --clip=10
-    python scripts/extract_feature_from_signal.py  --signal_file demo/ELIGOS/unmod.signal.tsv --clip 10 --output demo/ELIGOS/unmod.feature.tsv --motif NNGNN
-
-In the feature extraction step, the motif pattern should be provided using the argument ``--motif``. The base symbols of the motif follow the IUB code standard. 
-
-
-**6. Train-test split**
-
-The train-test split is performed randomly, ensuring that the data points in each set are representative of the overall dataset. The default split ratios are 80% for training and 20% for testing. The train-test split ratio can be customized by using the argument ``--train_ratio`` to accommodate the specific requirements of the problem and the size of the dataset.
-
-The training set is used to train the model, allowing it to learn patterns and relationships present in the data. The testing set, on the other hand, is used to assess the model's performance on new, unseen data. It serves as an independent evaluation set to measure how well the trained model generalizes to data it has not encountered before. By evaluating the model on the testing set, we can estimate its performance, detect overfitting (when the model performs well on the training set but poorly on the testing set) and assess its ability to make accurate predictions on new data.
-::
-    usage: train_test_split.py [-h] [--input_file INPUT_FILE]
-                               [--train_file TRAIN_FILE] [--test_file TEST_FILE]
-                               [--train_ratio TRAIN_RATIO]
-    
-    Split a feature file into training and testing sets.
-    
-    optional arguments:
-      -h, --help                  show this help message and exit
-      --input_file INPUT_FILE     Path to the input feature file
-      --train_file TRAIN_FILE     Path to the train feature file
-      --test_file TEST_FILE       Path to the test feature file
-      --train_ratio TRAIN_RATIO   Ratio of instances to use for training (default: 0.8)
-
-    #m7G
-    python scripts/train_test_split.py --input_file demo/ELIGOS/m7G.feature.tsv --train_file demo/ELIGOS/m7G.train.feature.tsv --test_file demo/ELIGOS/m7G.test.feature.tsv --train_ratio 0.8
-    
-    #unmodified
-    python scripts/train_test_split.py --input_file demo/ELIGOS/unmod.feature.tsv --train_file demo/ELIGOS/unmod.train.feature.tsv --test_file demo/ELIGOS/unmod.test.feature.tsv --train_ratio 0.8
-
-
-**7. Train m7G model**
-
-To transfer the pretrained TandemMod model to new types of modifications, you can set the ``--run_mode`` argument to "transfer". TandemMod accepts both modified and unmodified feature files as input. Additionally, test feature files are necessary to evaluate the model's performance. You can specify the pretrained model by using the argument ``--pretrained_model`` and the new model save path by using the argument ``--new_model``. The model's training epochs can be defined using the argument ``--epochs``, and the model states will be saved at the end of each epoch. TandemMod will preferentially use the ``GPU`` for training if CUDA is available on your device; otherwise, it will utilize the ``CPU`` mode. The training process duration can vary, depending on the size of your dataset and the computational capacity, and may last for several hours. 
-::
-    usage: TandemMod.py [-h] --run_mode RUN_MODE
-                        [--pretrained_model PRETRAINED_MODEL]
-                        [--new_model NEW_MODEL] [--train_data_mod TRAIN_DATA_MOD]
-                        [--train_data_unmod TRAIN_DATA_UNMOD]
-                        [--test_data_mod TEST_DATA_MOD]
-                        [--test_data_unmod TEST_DATA_UNMOD]
-                        [--feature_file FEATURE_FILE]
-                        [--predict_result PREDICT_RESULT] [--epoch EPOCH]
-    
-    TandemMod, multiple types of RNA modification detection.
-    
-    optional arguments:
-      -h, --help                               show this help message and exit
-      --run_mode RUN_MODE                      Run mode. Default is train
-      --pretrained_model PRETRAINED_MODEL      Pretrained model file.
-      --new_model NEW_MODEL                    New model file to be saved.
-      --train_data_mod TRAIN_DATA_MOD          Train data file, modified.
-      --train_data_unmod TRAIN_DATA_UNMOD      Train data file, unmodified.
-      --test_data_mod TEST_DATA_MOD            Test data file, modified.
-      --test_data_unmod TEST_DATA_UNMOD        Test data file, unmodified.
-      --epoch EPOCH                            Training epoch
-
-    python scripts/TandemMod.py --run_mode transfer \
-      --pretrained_model demo/model/m6A.demo.IVET.pkl \
-      --new_model demo/model/m7G.demo.ELIGOS.transfered_from_IVET_m6A.pkl \
-      --train_data_mod demo/ELIGOS/m7G.train.feature.tsv \
-      --train_data_unmod demo/ELIGOS/unmod.train.feature.tsv \
-      --test_data_mod demo/ELIGOS/m7G.test.feature.tsv \
-      --test_data_unmod demo/ELIGOS/unmod.test.feature.tsv \
-      --epoch 100
-
-During training process, the following information can be used to monitor and evaluate the performance of the transfered model:
-::
-    device= cpu
-    transfer learning process.
-    data loaded.
-    start training...
-    Epoch 0-0 Train acc: 0.544000,Test Acc: 0.489786,time0:00:08.688707
-    Epoch 1-0 Train acc: 0.674000,Test Acc: 0.857939,time0:00:05.190997
-    Epoch 2-0 Train acc: 0.748000,Test Acc: 0.813835,time0:00:05.426035
-    Epoch 3-0 Train acc: 0.778000,Test Acc: 0.753946,time0:00:05.180632
-    Epoch 4-0 Train acc: 0.854000,Test Acc: 0.776230,time0:00:05.236281
-    Epoch 5-0 Train acc: 0.886000,Test Acc: 0.817549,time0:00:05.219122
-    Epoch 6-0 Train acc: 0.926000,Test Acc: 0.889044,time0:00:05.470729
-
-
-
-After the data processing and model training, the following files should be generated by TandemMod. The trained model ``m7G.demo.ELIGOS.transfered_from_IVET_m6A.pkl`` will be saved in the ``./demo/model/`` folder. You can utilize this fine-tuned model for making predictions in the future.
-::
-    demo
-    ├── ELIGOS
-    │   ├── ELIGOS_m7G
-    │   ├── ELIGOS_m7G.fastq
-    │   ├── ELIGOS_m7G_guppy
-    │   ├── ELIGOS_m7G_guppy_single
-    │   ├── ELIGOS_m7G.sam
-    │   ├── ELIGOS_unmod
-    │   ├── ELIGOS_unmod.fastq
-    │   ├── ELIGOS_unmod_guppy
-    │   ├── ELIGOS_unmod_guppy_single
-    │   ├── ELIGOS_unmod.sam
-    │   ├── m7G.feature.tsv
-    │   ├── m7G.signal.tsv
-    │   ├── m7G.test.feature.tsv
-    │   ├── m7G.train.feature.tsv
-    │   ├── unmod.feature.tsv
-    │   ├── unmod.signal.tsv
-    │   ├── unmod.test.feature.tsv
-    │   └── unmod.train.feature.tsv
-    ├── ELIGOS_reference.fa
-    └── model
-           ├── m6A.demo.IVET.pkl
-           └── m7G.demo.ELIGOS.transfered_from_IVET_m6A.pkl
-
-
-
-Predict m6A sites in human cell lines
-********************
-
-HEK293T nanopore data is publicly available and can be downloaded from the `SG-NEx project <https://groups.google.com/g/sg-nex-updates>`_. In this demo, subset of the HEK293T nanopore data was taken for demonstration purposes due to the large size of the original datasets. The demo datasets were located under ``./demo/HEK293T/`` directory.
-::
-    demo
-    └── HEK293T
-        └── HEK293T_fast5
-            └── HEK293T.fast5
-
-**1. Guppy basecalling**
-
-Basecalling converts the raw signal generated by Oxform Nanopore sequencing to DNA/RNA sequence. Guppy is used for basecalling in this step. In some nanopore datasets, the sequence information is already contained within the FAST5 files. In such cases, the basecalling step can be skipped as the sequence data is readily available.
-::
-    guppy_basecaller -i demo/HEK293T/HEK293T_fast5 -s demo/HEK293T/HEK293T_fast5_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
+    guppy_basecaller -i demo_data/HeLa/HeLa_fast5 -s demo_data/HeLa/HeLa_fast5_guppy --num_callers 40 --recursive --fast5_out --config rna_r9.4.1_70bps_hac.cfg
     
 
 **2. Multi-reads FAST5 files to single-read FAST5 files**
 
 Convert multi-reads FAST5 files to single-read FAST5 files. If the data generated by the sequencing device is already in the single-read format, this step can be skipped.
 ::
-    multi_to_single_fast5 -i demo/HEK293T/HEK293T_fast5_guppy -s demo/HEK293T/HEK293T_fast5_guppy_single --recursive
+    multi_to_single_fast5 -i demo_data/HeLa/HeLa_fast5_guppy -s demo_data/HeLa/HeLa_fast5_guppy_single --recursive
 
 
 **3. Tombo resquiggling**
 
 In this step, the sequence obtained by basecalling is aligned or mapped to a reference genome or a known sequence. Then the corrected sequence is then associated with the corresponding current signals. The resquiggling process is typically performed in-plac. No separate files are generated in this step. GRCh38 transcripts file can be download `here <https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001405.40/>`_. 
 ::
-    tombo resquiggle --overwrite --basecall-group Basecall_1D_001 demo/HEK293T/HEK293T_fast5_guppy_single  demo/GRCh38_subset_reference.fa --processes 40 --fit-global-scale --include-event-stdev
+    tombo resquiggle --overwrite --basecall-group Basecall_1D_000 demo_data/HeLa/HeLa_fast5_guppy_single  demo_data/GRCh38_subset_reference.fa --processes 40 --fit-global-scale --include-event-stdev
 
 
 **4. Map reads to reference**
 
 minimap2 is used to map basecalled sequences to reference transcripts. The output sam file serves as the input for the subsequent feature extraction step. 
 ::
-    cat demo/HEK293T/HEK293T_fast5_guppy/pass/*.fastq >demo/HEK293T/HEK293T.fastq
-    minimap2 -ax map-ont demo/GRCh38_subset_reference.fa demo/HEK293T/HEK293T.fastq >demo/HEK293T/HEK293T.sam
+    cat demo_data/HeLa/HeLa_fast5_guppy/pass/*.fastq >demo_data/HeLa/HeLa.fastq
+    minimap2 -ax map-ont demo_data/GRCh38_subset_reference.fa demo_data/HeLa/HeLa.fastq >demo_data/HeLa/HeLa.sam
 
 
 **5. Feature extraction**
 
 Extract signals and features from resquiggled fast5 files using the following python scripts.
 ::
-    python scripts/extract_signal_from_fast5.py -p 40 --fast5 demo/HEK293T/HEK293T_fast5_guppy_single --reference demo/GRCh38_subset_reference.fa --sam demo/HEK293T/HEK293T.sam --output demo/HEK293T/HEK293T.signal.tsv --clip=10
-    python scripts/extract_feature_from_signal.py  --signal_file demo/HEK293T/HEK293T.signal.tsv --clip 10 --output demo/HEK293T/HEK293T.feature.tsv --motif DRACH
+
+    python script/feature_extraction.py --input demo_data/HeLa/HeLa_fast5_guppy_single \
+        --reference demo_data/GRCh38_subset_reference.fa   \
+        --sam demo_data/HeLa/HeLa.sam  \
+        --output demo_data/HeLa/HeLa.feature.tsv \
+        --clip 10 \
+        --motif NNCNN
+
+
+In the feature extraction step, the motif pattern should be provided using the argument ``--motif``. 
+
+
+**7. Predict ac4C sites**
+
+To predict ac4C sites in HeLa nanopore data using a pretrained model, you can set the ``--run_mode`` argument to "predict".  You can specify the pretrained model by using the argument ``--pretrained_model``. 
+::
+    python script/ac4Cnet.py --run_mode predict \
+          --pretrained_model model/C_ac4C.pkl \
+          --feature_file demo_data/HeLa/HeLa.feature.tsv \
+          --predict_result demo_data/HeLa/HeLa.prediction.tsv
+
+
+During the prediction process, ac4Cnet generates the following files. The prediction result file is named "HEK293T.prediction.tsv". 
+::
+
+    demo_data
+    ├── GRCh38_subset_reference.fa
+    ├── HeLa
+    │   ├── HeLa_fast5
+    │   ├── HeLa_fast5_guppy
+    │   ├── HeLa_fast5_guppy_single
+    │   ├── HeLa.fastq
+    │   ├── HeLa.feature.tsv
+    │   ├── HeLa.prediction.tsv
+    │   └── HeLa.sam
     
 
-
-In the feature extraction step, the motif pattern should be provided using the argument ``--motif``. The base symbols of the motif follow the IUB code standard. 
-
-
-**7. Predict m6A sites**
-
-To predict m6A sites in HEK293T nanopore data using a pretrained model, you can set the ``--run_mode`` argument to "predict".  You can specify the pretrained model by using the argument ``--pretrained_model``. 
-::
-    python scripts/TandemMod.py --run_mode predict \
-          --pretrained_model demo/model/m6A.demo.IVET.pkl \
-          --feature_file demo/HEK293T/HEK293T.feature.tsv \
-          --predict_result demo/HEK293T/HEK293T.prediction.tsv
-
-
-During the prediction process, TandemMod generates the following files. The prediction result file is named "HEK293T.prediction.tsv". 
-::
-    demo
-    └── HEK293T
-        ├── HEK293T_fast5
-        ├── HEK293T_fast5_guppy
-        ├── HEK293T_fast5_guppy_single
-        ├── HEK293T.fastq
-        ├── HEK293T.feature.tsv
-        ├── HEK293T.prediction.tsv
-        ├── HEK293T.sam
-        └── HEK293T.signal.tsv
 
 The prediction result "demo/HEK293T/HEK293T.prediction.tsv" provides prediction labels along with the corresponding modification probabilities, which can be utilized for further analysis.
 ::
     transcript_id   site    motif   read_id                                 prediction   probability
-    XM_005261965.4  10156   AAACA   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.1364245
-    XM_005261965.4  10164   AAACT   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.034915127
-    XM_005261965.4  10229   GAACC   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.4773725
-    XM_005261965.4  10241   GGACC   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.11096856
-    XM_005261965.4  10324   GGACT   60e0f6a3-2166-4730-9a10-8f8aaa750b37    mod          0.908553
-    XM_005261965.4  10362   AAACA   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.2004475
-    XM_005261965.4  10434   AGACA   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.1934688
-    XM_005261965.4  10498   GGACC   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.1313666
-    XM_005261965.4  10507   AAACA   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.030169742
-    XM_005261965.4  10511   AAACT   60e0f6a3-2166-4730-9a10-8f8aaa750b37    unmod        0.020174831
-    XM_005261965.4  10592   AGACT   60e0f6a3-2166-4730-9a10-8f8aaa750b37    mod          0.7666112
+    NM_001349947.2  552     AACCA   320a1a8b-7709-4335-8f6a-84f09ba6592a    unmod        0.00014777448
+    XM_006720125.3  2437    ACCAG   53dd21de-f74b-44db-baa3-06c68772b7e1    unmod        0.062309794
+    NM_001321485.2  498     TGCTG   1f8ce6a2-5fac-4a2f-ae25-0abdb0de412e    unmod        0.17353779
+    NM_001199673.2  2972    ATCAA   5781a0c4-ede0-452e-8789-9a43740451ab    unmod        0.26891512
+    NM_014364.5     1233    GACAA   47f7b914-a51e-4eab-adb2-e500d8a46fd1    unmod        0.029849814
+    NM_001321485.2  515     GCCTC   31fe54e8-7724-40c6-aaa2-025ab5de7754    unmod        0.004975981
+    NM_001136267.2  1780    GACTA   62b6ab58-5ee0-4871-95d5-5db66a9c56c7    unmod        0.0018304548
+    NM_001143883.4  714     TGCAG   4fb0be9b-9628-46aa-9ba4-40a6456d7d52    unmod        0.1989807
+    NM_006012.4     1058    ATCTT   7c7ff067-1ead-4838-97c8-5fca91fdfe8a    unmod        0.06284212
+    NM_001143883.4  714     TGCAG   13493367-a9ab-4f20-9f62-ad32c2cc6c2e    unmod        0.022585329
+    NM_001369747.1  920     ATCAT   5d2b59a7-4946-40b0-9c0e-16ba009ad4f5    unmod        0.0009560142
+    NM_001321485.2  515     GCCTC   1cbc2a9b-02d5-4906-b292-63fe6a30baaa    unmod        0.0013002371
+    XR_949965.1     271     GTCAA   5db89b35-738e-462d-b92b-7cded1ed2c21    unmod        0.005573378
+    NM_005566.4     1652    ACCTT   5fd3dff6-0a1e-4f22-9a10-cb439cf41393    unmod        0.03093134
+    NM_001024630.4  5513    TTCAA   0f39d0bc-63ac-4c55-a08c-6c88c2f1fcca    unmod        0.083354354
+    NM_001997.5     473     GGCTT   2f62c329-8d4e-4a2e-b9f8-11290e077d8f    unmod        0.09690974
+    NR_003286.4     1355    AGCGA   49c7e639-5681-473e-936b-c2a01eb94c6f    mod          0.7482356
+    NM_001997.5     112     AACGG   31ec8d67-a62d-4085-8983-75a5c6833b17    unmod        0.01882868
+    NM_001144943.1  1298    TTCTT   133fa83c-cf3a-4b10-9575-81f298fd0839    unmod        0.13784541
+    XM_017004733.1  2098    CCCTC   0fca07db-bfa9-4974-8cde-aa746a76301c    unmod        0.0036647602
+    NM_213725.2     421     TTCAA   3e5efe25-6e79-439d-8c9e-26bfd59216da    mod          0.8380922
+
 
 The execution time for each demonstration is estimated to be approximately 3-10 minutes.

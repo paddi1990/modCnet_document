@@ -5,7 +5,7 @@ Data postprocessing
 
 Transcriptome location to genome location
 ********************
-In modification detection tasks that utilize Direct RNA Sequencing (DRS) data, where sequences are mapped to transcripts, it is often necessary to convert transcriptome locations to genome locations for comparison with other tools or experimental results. The script ``scripts/transcriptome_location_to_genome_location.py`` will take TandemMod prediction file as input and convert the transcriptome locations to genome locations.
+In modification detection tasks that utilize Direct RNA Sequencing (DRS) data, where sequences are mapped to transcripts, it is often necessary to convert transcriptome locations to genome locations for comparison with other tools or experimental results. The script ``scripts/transcriptome_location_to_genome_location.py`` will take the prediction file as input and convert the transcriptome locations to genome locations.
 ::
     usage: transcriptome_location_to_genome_location.py [-h] -i INPUT -o OUTPUT -g GFF
     Convert transcriptome location to genome location.
@@ -21,7 +21,7 @@ In modification detection tasks that utilize Direct RNA Sequencing (DRS) data, w
         --output predictions_genome_loc.tsv \
         --gff /path/to/your/genome_annotation.gtf
 
-In the above command, replace "predictions.tsv" with the actual TandemMod prediction file you have, and specify the desired output file name using ``--output``. The script will read the input prediction file, convert the transcriptome locations to genome locations, and save the converted predictions in the specified output file. Additionally, for the conversion, the script requires a genome annotation file in GFF (General Feature Format) format. The GFF file contains genomic coordinates and annotations for various features such as genes, exons, and transcripts.
+In the above command, replace "predictions.tsv" with the actual ac4Cnet prediction file you have, and specify the desired output file name using ``--output``. The script will read the input prediction file, convert the transcriptome locations to genome locations, and save the converted predictions in the specified output file. Additionally, for the conversion, the script requires a genome annotation file in GFF (General Feature Format) format. The GFF file contains genomic coordinates and annotations for various features such as genes, exons, and transcripts.
 
 Here is an example to illustrate the transcriptome locations format:
 ::
@@ -68,7 +68,7 @@ Here are the converted results in genome locations.
 
 Read-level predictions to site-level predictions
 ********************
-TandemMod provided single-read predictions as well as their modification probabilities. By aggregating all the predictions for each site, we can derive a consensus or summary prediction for that specific genomic location. The script is located under ``scripts/read_level_prediction_to_site_level_prediction.py``
+ac4Cnet provided single-read predictions as well as their modification probabilities. By aggregating all the predictions for each site, we can derive a consensus or summary prediction for that specific genomic location. The script is located under ``scripts/read_level_prediction_to_site_level_prediction.py``
 ::
     usage: read_level_prediction_to_site_level_prediction.py [-h] -i INPUT -o  OUTPUT
     Convert read-level predictions to site-level predictions.
@@ -105,4 +105,4 @@ In the given command, please replace "read_level_prediction.tsv" with the conver
 
 Futher analysis
 ********************
-The other data processing and plot scripts are located under the `plot <https://github.com/yulab2021/TandemMod/tree/master/results_reproduce>`_  directory.
+The other data processing and plot scripts are located under the `plot <https://github.com/yulab2021/ac4Ccnet/tree/master/results_reproduce>`_  directory.

@@ -96,47 +96,58 @@ The source code and data processing scripts are available on `GitHub <https://gi
 
 In the provided repository, the pretrained models are located under the ``./model`` directory, and the data processing scripts and the main script are located under the ``./script`` directory:: 
 
-    .
-    ├── data
-    │   ├── A_test.tsv
-    │   ├── A_train.tsv
-    │   ├── m5C
-    │   ├── m6A
-    │   ├── m6A_test.tsv
-    │   └── m6A_train.tsv
-    ├── demo
-    │   ├── fast5
-    │   │   └── batch_0.fast5
-    │   ├── files.txt
-    │   ├── guppy
-    │   │   ├── fail
-    │   │   │   └── fastq_runid_71d544d3bd9e1fe7886a5d176c756a576d30ed50_0_0.fastq
-    │   │   ├── guppy_basecaller_log-2023-06-06_09-58-28.log
-    │   │   ├── pass
-    │   │   │   └── fastq_runid_71d544d3bd9e1fe7886a5d176c756a576d30ed50_0_0.fastq
-    │   │   ├── sequencing_summary.txt
-    │   │   ├── sequencing_telemetry.js
-    │   │   └── workspace
-    │   │       └── batch_0.fast5
-    ├── models
-    │   ├── hm5C_transfered_from_m5C.pkl
-    │   ├── m1A_train_on_rice_cDNA.pkl
-    │   ├── m5C_train_on_rice_cDNA.pkl
-    │   ├── m6A_train_on_rice_cDNA.pkl
-    │   ├── m7G_transfered_from_m5C.pkl
-    │   ├── psU_transfered_from_m5C.pkl
-    │   ├── test.model
-    │   └── test.pkl
-    ├── plot
-    ├── README.md
-    ├── scripts
-    │   ├── extract_feature_from_signal.py
-    │   ├── extract_signal_from_fast5.py
-    │   ├── __init__.py
-    │   ├── models.py
-    │   ├── TandemMod.py
-    │   ├── train_test_split.py
-    │   ├── transcriptome_loci_to_genome_loci.py
-    │   └── utils.py
-    └── TandemMod.yaml
+
+  .
+  ├── ac4Cnet.yaml
+  ├── data
+  │   ├── event_level_features_C_base_quality.csv
+  │   ├── event_level_features_C_length.csv
+  │   ├── event_level_features_C_mean.csv
+  │   ├── event_level_features_C_median.csv
+  │   ├── event_level_features_C_std.csv
+  │   ├── IVT_transcripts_ac4C.csv
+  │   ├── IVT_transcripts_C.csv
+  │   ├── IVT_transcripts_m5C.csv
+  │   ├── qPCR_curve_4.13_1.csv
+  │   ├── qPCR_curve_4.13_2.csv
+  │   └── Rn_cycle_curve.csv
+  ├── demo_data
+  │   ├── ac4C.feature.test.tsv
+  │   ├── ac4C.feature.train.tsv
+  │   ├── C.feature.test.tsv
+  │   ├── C.feature.train.tsv
+  │   ├── GRCh38_subset_reference.fa
+  │   ├── HeLa
+  │   ├── IVT_DRS.reference.fasta
+  │   ├── IVT_fast5
+  │   ├── IVT_fast5_guppy
+  │   ├── IVT_fast5_guppy_single
+  │   ├── IVT.fastq
+  │   ├── IVT.feature
+  │   ├── IVT.sam
+  │   ├── m5C.feature.test.tsv
+  │   ├── m5C.feature.train.tsv
+  │   ├── model
+  │   └── test.feature.tsv
+  ├── docs
+  │   └── test
+  ├── model
+  │   ├── C_ac4C.pkl
+  │   ├── C_m5C_ac4C.pkl
+  │   ├── C_m5C.pkl
+  │   └── m5C_ac4C.pkl
+  ├── README.md
+  ├── results_reproduce
+  │   └── figure1_script.ipynb
+  └── script
+      ├── ac4Cnet.py
+      ├── feature_extraction.py
+      ├── __init__.py
+      ├── model.py
+      ├── models.py
+      ├── __pycache__
+      ├── read_level_prediction_to_site_level_prediction.py
+      ├── transcriptome_location_to_genome_location.py
+      └── utils.py
+
 
