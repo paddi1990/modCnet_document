@@ -3,7 +3,7 @@
    in this index.rst for them to be rendered and added to the
    table of contents
 
-Welcome to ac4Cnet's documentation!
+Welcome to modCnet's documentation!
 ==================================
 
 ac4Cnet is a deep learning framework designed to harness the power of Oxford Nanopore direct RNA sequencing for precise identification of N4-acetylcytidine (ac4C) sites, a crucial aspect in RNA modification studies. By effectively distinguishing ac4C from unmodified cytidine and 5-methylcytosine (m5C), ac4Cnet enables accurate estimation of modification rates at each ac4C site. Through rigorous validation on independent in vitro datasets and a human cell line, ac4Cnet showcases its robustness, versatility, and immense potential in advancing the understanding and exploration of ac4C modifications in mRNA.
