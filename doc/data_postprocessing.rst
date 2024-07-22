@@ -21,7 +21,7 @@ In modification detection tasks that utilize Direct RNA Sequencing (DRS) data, w
         --output predictions_genome_loc.tsv \
         --gff /path/to/your/genome_annotation.gtf
 
-In the above command, replace "predictions.tsv" with the actual ac4Cnet prediction file you have, and specify the desired output file name using ``--output``. The script will read the input prediction file, convert the transcriptome locations to genome locations, and save the converted predictions in the specified output file. Additionally, for the conversion, the script requires a genome annotation file in GFF (General Feature Format) format. The GFF file contains genomic coordinates and annotations for various features such as genes, exons, and transcripts.
+In the above command, replace "predictions.tsv" with the actual modCnet prediction file you have, and specify the desired output file name using ``--output``. The script will read the input prediction file, convert the transcriptome locations to genome locations, and save the converted predictions in the specified output file. Additionally, for the conversion, the script requires a genome annotation file in GFF (General Feature Format) format. The GFF file contains genomic coordinates and annotations for various features such as genes, exons, and transcripts.
 
 Here is an example to illustrate the transcriptome locations format:
 ::
@@ -68,7 +68,7 @@ Here are the converted results in genome locations.
 
 Read-level predictions to site-level predictions
 ********************
-ac4Cnet provided single-read predictions as well as their modification probabilities. By aggregating all the predictions for each site, we can derive a consensus or summary prediction for that specific genomic location. The script is located under ``scripts/read_level_prediction_to_site_level_prediction.py``
+modCnet provided single-read predictions as well as their modification probabilities. By aggregating all the predictions for each site, we can derive a consensus or summary prediction for that specific genomic location. The script is located under ``scripts/read_level_prediction_to_site_level_prediction.py``
 ::
     usage: read_level_prediction_to_site_level_prediction.py [-h] -i INPUT -o  OUTPUT
     Convert read-level predictions to site-level predictions.

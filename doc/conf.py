@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'ac4Cnet'
+project = 'modCnet'
 copyright = '2024, Yulab'
 author = 'Yulab'
 

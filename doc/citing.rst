@@ -1,6 +1,6 @@
 .. _citing:
 
 
-Citing ac4Cnet
+Citing modCnet
 --------------------------
-If you use ac4Cnet in your research, please cite ******************************.
+If you use modCnet in your research, please cite ******************************.

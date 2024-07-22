@@ -6,9 +6,9 @@
 Welcome to modCnet's documentation!
 ==================================
 
-ac4Cnet is a deep learning framework designed to harness the power of Oxford Nanopore direct RNA sequencing for precise identification of N4-acetylcytidine (ac4C) sites, a crucial aspect in RNA modification studies. By effectively distinguishing ac4C from unmodified cytidine and 5-methylcytosine (m5C), ac4Cnet enables accurate estimation of modification rates at each ac4C site. Through rigorous validation on independent in vitro datasets and a human cell line, ac4Cnet showcases its robustness, versatility, and immense potential in advancing the understanding and exploration of ac4C modifications in mRNA.
+modCnet is a deep learning framework designed to harness the power of Oxford Nanopore direct RNA sequencing for precise identification of N4-acetylcytidine (ac4C) and 5-methylcytosine (m5C) sites, a crucial aspect in RNA modification studies. By effectively distinguishing ac4C and m5C from unmodified cytidine, modCnet enables accurate estimation of modification rates at each ac4C site. Through rigorous validation on independent in vitro datasets and a human cell line, modCnet showcases its robustness, versatility, and immense potential in advancing the understanding and exploration of ac4C modifications in mRNA.
 
-To use ac4Cnet, you can follow the instructions below:
+To use modCnet, you can follow the instructions below:
 
 Contents
 ==========
@@ -28,12 +28,12 @@ Contents
 
 
 
-Citing ac4Cnet
+Citing modCnet
 --------------------------
-If you use ac4Cnet in your research, please cite **************************************
+If you use modCnet in your research, please cite **************************************
 
 Contacts
 --------------------------
-ac4Cnet is developed and maintained by `You Wu <https://github.com/paddi1990>`_ and `Xiang Yu <https://github.com/yulab2021>`_ from Shanghai Jiao Tong University. If you want to contribute or have any questions, please leave an issue in `our repository <https://github.com/yulab2021/ac4Cnet/issues>`_.
+modCnet is developed and maintained by `You Wu <https://github.com/paddi1990>`_ and `Xiang Yu <https://github.com/yulab2021>`_ from Shanghai Jiao Tong University. If you want to contribute or have any questions, please leave an issue in `our repository <https://github.com/yulab2021/modCnet/issues>`_.
 
 Thank you!

@@ -6,15 +6,15 @@ Usage
 Source code
 ********************
 
-The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/ac4Cnet>`_. You can download them by using the git clone command::
+The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/modCnet>`_. You can download them by using the git clone command::
 
-    git clone https://github.com/yulab2021/ac4Cnet.git
+    git clone https://github.com/yulab2021/modCnet.git
 
 
 In the provided repository, the pretrained models are located under the ``./model`` directory, and the data processing scripts and the main script are located under the ``./script`` directory:: 
 
   .
-  ├── ac4Cnet.yaml
+  ├── modCnet.yaml
   ├── data
   │   ├── event_level_features_C_base_quality.csv
   │   ├── event_level_features_C_length.csv
@@ -56,7 +56,7 @@ In the provided repository, the pretrained models are located under the ``./mode
   ├── results_reproduce
   │   └── figure1_script.ipynb
   └── script
-      ├── ac4Cnet.py
+      ├── modCnet.py
       ├── feature_extraction.py
       ├── __init__.py
       ├── model.py
@@ -101,7 +101,7 @@ The data processing procedure is essential for training and prediction. The raw 
 
 Training from scratch
 ********************
-The de novo training mode in ac4Cnet enables users to train the model from scratch using their own datasets. To train a ac4Cnet model, both modified and modification-free Direct RNA Sequencing (DRS) data are required.
+The de novo training mode in modCnet enables users to train the model from scratch using their own datasets. To train a modCnet model, both modified and modification-free Direct RNA Sequencing (DRS) data are required.
 
 Before training, the raw FAST5 files need to undergo the `data processing procedure <data_preprocessing>`_ . This process generates feature files specific to each modification type. The feature files should follow a naming convention that reflects the modification type they represent::
 
@@ -114,9 +114,9 @@ In order to evaluate the performance during the training process, it is importan
     python script/train_test_split.py --input_file data/C.feature.tsv --train_file data/C.feature.train.tsv --test_file data/C.feature.test.tsv --train_ratio 0.8
     python script/train_test_split.py --input_file data/ac4C.feature.tsv --train_file data/ac4C.feature.train.tsv --test_file data/ac4C.feature.test.tsv --train_ratio 0.8
 
-To train the ac4Cnet model using labelled training dataset, you can set the ``--run_mode`` argument to "train". This allows the model to be trained from scratch. Test data are required to evaluation the model performance.
+To train the modCnet model using labelled training dataset, you can set the ``--run_mode`` argument to "train". This allows the model to be trained from scratch. Test data are required to evaluation the model performance.
 ::
-    python script/ac4Cnet.py --run_mode train \
+    python script/modCnet.py --run_mode train \
           --model_type C/ac4C \
           --new_model model/C_ac4C.pkl \
           --train_data_C data/C.feature.train.tsv \
@@ -141,7 +141,7 @@ Prediction
 ********************
 Pretained models were saved in directory ``./model``. You can load pretrained models to predict modification for new data by setting the ``--run_mode`` argument to "predict". Before prediction, the raw FAST5 files need to undergo the `data processing procedure <data_preprocessing>`_ ::
 
-    python script/ac4Cnet.py --run_mode predict \
+    python script/modCnet.py --run_mode predict \
           --pretrained_model model/C_ac4C.pkl \
           --feature_file data/WT.feature.tsv
           --predict_result data/WT.predict.tsv

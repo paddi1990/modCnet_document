@@ -2,7 +2,7 @@
 
 Installation
 ==================================
-The following modules are needed to run ac4Cnet.
+The following modules are needed to run modCnet.
 
 
 .. list-table:: Required modules
@@ -82,23 +82,23 @@ Guppy can be obtained from `Oxford Nanopore Technologies <https://nanoporetech.c
 The entire installation will take about 10 minutes. After installing all the essential packages,  reset the environment's state by deactivating and reactivating the environment:
 ::
     conda deactivate
-    conda activate ac4Cnet
+    conda activate modCnet
 
 We have also provided a yaml file in the repository so you can install the dependencies through the configuration file::
 
-    conda env create -f ac4Cnet.yaml
+    conda env create -f modCnet.yaml
 
 
-The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/ac4Cnet>`_. You can download them by using the git clone command::
+The source code and data processing scripts are available on `GitHub <https://github.com/yulab2021/modCnet>`_. You can download them by using the git clone command::
 
-    git clone https://github.com/yulab2021/ac4Cnet.git
+    git clone https://github.com/yulab2021/modCnet.git
 
 
 In the provided repository, the pretrained models are located under the ``./model`` directory, and the data processing scripts and the main script are located under the ``./script`` directory:: 
 
 
   .
-  ├── ac4Cnet.yaml
+  ├── modCnet.yaml
   ├── data
   │   ├── event_level_features_C_base_quality.csv
   │   ├── event_level_features_C_length.csv
@@ -140,7 +140,7 @@ In the provided repository, the pretrained models are located under the ``./mode
   ├── results_reproduce
   │   └── figure1_script.ipynb
   └── script
-      ├── ac4Cnet.py
+      ├── modCnet.py
       ├── feature_extraction.py
       ├── __init__.py
       ├── model.py
